@@ -1,0 +1,20 @@
+@document.meta
+title: My Experience Selfhosting
+description: How I ended up selfhosting and my overall experience with it
+authors: [
+  amartin
+]
+categories: [
+  selfhosting
+  rant
+]
+created: 2025-07-22T19:53:27-04:00
+updated: 2025-07-22T19:53:27-04:00
+draft: true
+layout: post
+version: 1.1.1
+@end
+
+* My Experience Selfhosting
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+  labore et dolore magna aliqua. Lobortis scelerisque fermentum dui faucibus in ornare.

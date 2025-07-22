@@ -1,0 +1,80 @@
+@document.meta
+title: About
+description: Who am I
+authors: [
+  amartin
+]
+categories: [
+  about
+]
+created: 2025-07-11T09:45:53-04:00
+updated: 2025-07-17T06:32:04-0400
+draft: false
+layout: default
+version: 1.1.1
+@end
+
++html.class text-center mb-10
+* About me
+  Hi there!
+
+  I'm Alejandro, a full-stack web developer, sysadmin and {https://neovim.io}[Neovim] plugin developer and open-source
+  lover known as {https://github.com/NTBBloodbath}[NTBBloodbath] on the web. I have a great passion for learning new things and
+  developing software to make developers life easier to increase our productivity.
+
+  During my free time I like to do hiking in the mountains or play video games with friends, and
+  also contribute to the open-source community.
+
+  @embed html
+  <h2><i class="ti ti-address-book"></i> Contact</h2>
+  @end
+  If you want to contact me you can find me on multiple platforms!
+
+  - Matrix - `@ntbbloodbath.matrix.org`
+  - Discord - `@ntbbloodbath`
+
+  +html.class note
+  > *Note*: /You can also find an email address on my GitHub and Codeberg profiles in
+    case you want a more formal way to reach me./
+
+  @embed html
+  <h2><i class="ti ti-tools"></i> Tools and stack</h2>
+  @end
+
+  I usually use /several/ tools, languages and frameworks in my daily life, but the following are my
+  favorites:
+
+  @embed html
+  <h3><i class="ti ti-vocabulary"></i> Languages</h3>
+  @end
+  - Zig
+  - Rust
+  - Elixir
+  - Python
+  - JavaScript/TypeScript
+  - SQL (PostgreSQL, MySQL)
+
+  @embed html
+  <h3><i class="ti ti-keyframes"></i> Frameworks</h3>
+  @end
+  - Phoenix (Elixir)
+  - Express.js (JavaScript)
+  - NestJS (JavaScript)
+  - NuxtJS (JavaScript)
+
+  @embed html
+  <h3><i class="ti ti-tool"></i> Tools</h3>
+  @end
+  - Nix
+  - Git
+  - Jujutsu
+  - Nginx
+  - Docker/Podman
+  - GitHub CI/CD
+  - Neovim
+
+  ---
+
++html.class text-justify mt-6
+And the operating systems that I use on a daily basis are Windows, Linux and MacOS (yes, I have, use
+and love them all).

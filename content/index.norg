@@ -1,0 +1,51 @@
+@document.meta
+title: Amartin's Blog
+description:
+authors: [
+  amartin
+]
+categories: []
+created: 2025-07-11T09:35:43-04:00
+updated: 2025-07-17T06:25:12-0400
+layout: home
+draft: false
+version: 1.1.1
+@end
+
++html.class md:mt-12
+* Hey, welcome to my blog!
+  @embed html
+  <div class="flex items-center text-2xl py-2">
+    <a class="!no-underline mr-4" href="https://codeberg.org/amartin">
+      <i class="ti ti-brand-git"></i>
+    </a>
+    <a class="!no-underline mr-4" href="https://github.com/NTBBloodbath">
+      <i class="ti ti-brand-github-filled"></i>
+    </a>
+    <a class="!no-underline mr-4" href="https://discord.com/users/387036585033465856">
+      <i class="ti ti-brand-discord-filled"></i>
+    </a>
+    <a class="!no-underline mr-2" href="https://amartin.codeberg.org/rss">
+      <i class="ti ti-rss"></i>
+    </a>
+    <!-- tabler-icons does not have a ko-fi icon yet, please see
+         -->
+    <a class="!no-underline" href="https://ko-fi.com/C0C4RL8T8">
+      <img
+        class="size-12"
+        src="https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"
+        alt="ko-fi"
+      />
+    </a>
+  </div>
+  @end
+
+  I'm Alejandro, a full-stack web developer, sysadmin and {https://neovim.io}[Neovim] plugin developer and `open-source`
+  lover known as {https://github.com/NTBBloodbath}[NTBBloodbath] on the web.
+
+  Here you will find posts about Neovim, Elixir and pretty much anything I find useful to share :p
+
+  +html.class note
+  > *Note*: currently there are no many posts in here as I'm in the middle of migrating my old Hugo
+    blog to {https://github.com/NTBBloodbath/norgolith}[Norgolith] and I'm also moving from Codeberg pages to self-hosting. Please be patient if
+    you want to read my old content back again!

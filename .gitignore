@@ -1,0 +1,18 @@
+# Theme backup
+.theme_backup
+
+# Production artifacts
+public
+
+# Sync scripts
+deploy.sh
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
