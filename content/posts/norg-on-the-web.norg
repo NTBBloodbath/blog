@@ -685,7 +685,7 @@ and its early development alongside some technical explanations, and just want t
     +html.class warning
     > *Warning*:
     Since most things explained during this section are already explained very well in the
-    documentation site, I will only do a brief explanation of some things. Please {https://ntbbloodbath.github.io/norgolith}[check out] the
+    documentation site, I will only do a brief explanation of some things. Please {https://norgolith.amartin.beer}[check out] the
     documentation site if you want to know more. Additionally, this guide covers the latest
     development version so you may find some commands are named differently (e.g. `serve` is now `dev`).
 
@@ -796,11 +796,11 @@ and its early development alongside some technical explanations, and just want t
 
      +html.class important
      > *Important*: this section does *NOT* cover everything in Norgolith, topics such as theming and
-     content schemas are not mentioned here, for these things please refer to the {https://ntbbloodbath.github.io/norgolith/docs}[documentation site].
+     content schemas are not mentioned here, for these things please refer to the {https://norgolith.amartin.beer/docs}[documentation site].
 
 ***** CLI commands
       Norgolith keeps familiarity with other SSGs. For a full reference of the available commands
-      and their flags/options, please refer to the {https://ntbbloodbath.github.io/norgolith/docs/commands/}[commands reference].
+      and their flags/options, please refer to the {https://norgolith.amartin.beer/docs/commands/}[commands reference].
 
       Norgolith has a simple CLI with just a handful of commands. The ones you’ll use most in your
       daily workflow, though, are these:
@@ -843,7 +843,7 @@ and its early development alongside some technical explanations, and just want t
       the `lith build` command to build your site for production.
 
 ***** Configuration
-      Norgolith uses the TOML format for configurations, please refer to the {https://ntbbloodbath.github.io/norgolith/docs/configuration/}[configuration reference]
+      Norgolith uses the TOML format for configurations, please refer to the {https://norgolith.amartin.beer/docs/configuration/}[configuration reference]
       for a full list of every possible configuration option and their valid values.
 
       *The following is the default configuration file contents*:
@@ -876,7 +876,7 @@ and its early development alongside some technical explanations, and just want t
     `templates/` directory:
 
     +html.class note
-    > *Note*: the Norgolith documentation site also has a {https://ntbbloodbath.github.io/norgolith/docs/templating/}[Templating Guide] section which pretty much
+    > *Note*: the Norgolith documentation site also has a {https://norgolith.amartin.beer/docs/templating/}[Templating Guide] section which pretty much
     covers all of this and includes real-world examples.
 
 **** Template Basics
@@ -1097,7 +1097,7 @@ and its early development alongside some technical explanations, and just want t
    waiting for—go for it!
 
    If you’d like to contribute, you’re more than welcome—whether it’s just filing bug
-   reports, requesting features, or fixing typos. Please take a look at the {https://ntbbloodbath.github.io/norgolith/docs/contributing/}[Contributing] section on
+   reports, requesting features, or fixing typos. Please take a look at the {https://norgolith.amartin.beer/docs/contributing/}[Contributing] section on
    the documentation site to learn the guidelines and practices I recommend following when
    contributing code to the project. Any contribution is welcome and you can join the {https://discord.gg/T6EgTAX7ht}[Neorg
    community on Discord] for support in the `#norgolith` channel under the `3rd party` section!
