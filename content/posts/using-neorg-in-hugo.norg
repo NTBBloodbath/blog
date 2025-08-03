@@ -1,0 +1,206 @@
+@document.meta
+title: Using Neorg in Hugo
+description: Maybe you heard that you can use Orgmode with Hugo, but what about Neorg?
+authors: [
+  amartin
+]
+categories: [
+  neorg
+  hugo
+]
+created: 2022-12-24T16:47:10-04:00
+updated: 2025-08-02T22:17:22-0400
+draft: false
+layout: post
+version: 1.1.1
+@end
+
+/Hear me now, what if we embed {https://github.com/nvim-neorg/neorg}[Neorg] in {https://gohugo.io}[Hugo]?/
+
+Yes, it is possible /and doable/. However, Neorg is not going to be used to render the content
+directly. In this post we are going to deep dive into this topic, and some future ideas to improve
+the actual behavior.
+
++html.class note
+> *Note*: Notice that this post *assumes* that you already have a working blog using Hugo, no matters if
+it is a pretty basic one or an advanced /and large one/.
+
+** Getting started
+   +html.class border-none! mt-0!
+*** Dependencies
+    First of all, we need to get a starting point. That is, getting our work environment done.
+
+    We are going to need the following software installed in our system:
+    - Hugo (any version is fine, however, latest is recommended)
+    - Neovim `>= 0.8` (with Neorg plugin installed)
+
+    +html.class note
+    > *Note*: Notice that I am not providing any kind of installation instructions as the mentioned software
+    already has pretty good documentation and instructions on how to get it working.
+
+*** Our first post
+    Now that we have all the dependencies installed in our system, it is time to start blogging!
+
+    Yeah but how to get started with Neorg in Hugo? Right, so there are no rules at all. You can
+    store your norg documents anywhere you wish, however, I recommend placing them in a `norg`
+    directory in your `content` directory at the root of your blog repository.
+
+    That way, you will have two subdirectories inside `content`. That is `posts` with the actual
+    posts of your blog, and `norg` where our blog posts sources are stored.
+
+    /Hold on, did you say "our blog posts sources"?/ Yes, I did. This can sound a bit confusing at
+    first but no worries, we are going to explain it later on!
+
+    First of all, we need to create a new norg document. So we open Neovim and start editing it
+    right now!
+    @code bash
+    $ neovim ./content/norg/first-post.norg
+    @end
+
+    Now that we are in our newly created document, we can start editing it and add our metadata.
+    Here is a simple example (it does use my required metadata, it can vary accordingly to your Hugo
+    theme!).
+    @code norg
+    #comment
+    These are my document metadata fields
+
+    title: First post
+    date: 2022-12-24T20:38:47-04:00
+    aliases: [
+      /first-post
+    ]
+    tags: [
+      neorg
+      hugo
+    ]
+    author: NTBBloodbath
+    showToc: true
+    TocOpen: false
+    draft: false
+    hidemeta: false
+    comments: false
+    description: This is my first post using Neorg in Hugo!
+    disableShare: true
+    hideSummary: false
+    ShowReadingTime: true
+    ShowBreadCrumbs: true
+    ShowPostNavLinks: true
+    editPost: {
+      URL: https://codeberg.org/NTBBloodbath/pages
+      Text: Suggest Changes
+      appendFilePath: true
+    }
+
+    #comment
+    This is the actual content of my blog post
+
+    This is my first Neorg-based blog post, say hi!
+
+    ** This is a 2nd level heading
+       Say hi again! :p
+    @end
+
+    +html.class note
+    > Notice that I am not writing the `@document.meta` nor its `@end` tags here. Neorg tree-sitter
+      parser will not understand all the different `@end` tags in the code block and misbehave when
+      exporting this file.
+
+    Now we can proceed to save our document (I do not think I need to tell you how to save it) and
+    run the following command in Neovim:
+
+    @code vim
+    :Neorg export to-file ../posts/first-post.md
+    @end
+
+    This will basically tell Neorg to export our current file to a given path. In our case, we are
+    exporting our blog post to markdown using the built-in exporter /and/ from `content/norg`
+    directory to `content/posts` directory so Hugo can see them. That is it, now we are using Neorg
+    to write down our posts for our beloved blog!
+
+** Troubleshooting
+   There are some small issues with the built-in Neorg exporter that I am going to patch in the next
+   weeks (aka next year) so at the moment you have to manually edit the produced file to fix some
+   small issues with the exported content. This section will be updated later when addressing the
+   issues mentioned here.
+
+*** Frontmatter with nested fields
+    Exporter does not properly export nested document metadata fields, like the following:
+
+    @code json
+    editPost: {
+      URL: https://codeberg.org/NTBBloodbath/pages
+      Text: Suggest Changes
+      appendFilePath: true
+    }
+    @end
+
+    Once we export it, it is exported as the following:
+
+    @code yaml
+    editPost: URL: https://codeberg.org/NTBBloodbath/pages
+    Text: Suggest Changes
+    appendFilePath: true
+    @end
+
+    You will need to manually fix the indentation of that kind of metadata fields to match YAML
+    syntax.
+
+    @code yaml
+    editPost:
+        URL: https://codeberg.org/NTBBloodbath/pages
+        Text: Suggest Changes
+        appendFilePath: true
+    @end
+
+*** Code blocks language
+    Right now, exporter produce the following output:
+
+    @code
+    \`\`\`
+    javascript
+    let x = 5;
+    console.log(x);
+    \`\`\`
+    @end
+
+    This is not the expected behavior and you will need to modify each code block to remove the
+    indentation and align the code block language with the code block delimiter as usual.
+
+** Future ideas
+   As I told you at the very beginning of the post, there are /a few/ ideas to improve the current
+   behavior of using Neorg in Hugo. Now we are going to explain them!
+
+*** Metadata
+    As you may know, Neorg got document metadata that we can export to markdown and it is going to
+    be the same as what we know as frontmatter (embedded yaml with metadata, providing things like
+    title, author, etc).
+
+    This is great, however, we have to write it by hand in Neorg if we are going to use Hugo as
+    there is only one template for metadata at the moment of writing this post. What if we can just
+    tell Neorg "Hey, let’s use a different template for this document as it has other purpose"?
+
+    Well, this is exactly what we are going to achieve with a future PR to Neorg plugin for Neovim!
+
+    The idea behind this is to setup Neorg with a few extra metadata skeletons, which we can use
+    later by passing an extra /optional/ argument to `:Neorg inject-metadata` command in Neovim.
+    That means, we could do something like `:Neorg inject-metadata hugo` and it is going to generate
+    the metadata fields required by our Hugo theme in order to work properly instead of having to
+    write it manually!
+
+*** Using plain Norg files
+    This is a great idea too, isn’t it? Well, this one is way more complex and harder than the
+    previous one. But why?
+
+    Well, this is because we can use pandoc (accordingly to official Hugo documentation) in order to
+    convert our documents automatically on build to a valid format. The problem here is that Neorg
+    pandoc parser is actually stale as Neorg was suffering a lot of internal syntax breaking changes
+    (that were required!) so there is no way to actually make use of this option /yet/.
+
+    The good thing about this is that Neorg did finally reach version 1.0 and that means, we finally
+    got a stable syntax and pandoc parser work can be started again!
+
+    > /But wait, Orgmode can be used directly with no extra requirements or converters!/
+
+    Yes, that is a thing, however it would require another parser for Neorg in order to be able to
+    do that too, AFAIK. And this is not even an idea /yet/, maybe in a few months or years, but not
+    now!

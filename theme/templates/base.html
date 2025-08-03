@@ -113,6 +113,11 @@
   {% endif %}
 
   {# Goatcounter #}
+  <script>
+      // Only load on production environment
+      if (window.location.host !== 'amartin.beer')
+          window.goatcounter = {no_onload: true}
+  </script>
   <script data-goatcounter="https://stats.amartin.beer/count" async src="//stats.amartin.beer/count.js"></script>
 
   {# Icons #}
