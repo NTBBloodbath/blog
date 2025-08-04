@@ -1,0 +1,77 @@
+@document.meta
+title: HTTP Tree-Sitter Parser Rewrite
+description: A review of the current tree-sitter parser for HTTP documents and its fix
+authors: [
+  amartin
+]
+categories: [
+  neovim
+  rest.nvim
+  tree-sitter
+  devlog
+]
+created: 2023-12-20T10:15:55-04:00
+updated: 2025-08-04T05:49:32-0400
+draft: false
+layout: post
+truncate: 124
+truncate_char:
+version: 1.1.1
+@end
+
+/It took a little longer than I thought, but here we are. It is time to finally fix and use it for
+what it has been made for!/
+
+** Introduction
+   As you may know, the `tree-sitter` HTTP parser is what leads the operation of `rest.nvim`, or well, a
+   part of it (currently).
+
+   The parser was written at a time when I didn’t have much knowledge in parsing (yes, I know, it
+   is ironic), it’s time to give it new life and use it for what it was really made for, to do
+   parsing and not just give highlighting to your HTTP documents!
+
+** The actual issues
+   In the past, there has been attempts to use the `tree-sitter` parser as the parsing engine in `rest.
+   nvim`, some of them has been public and some others were experimental. In every of those attempts,
+   it was a really complex and unpleasant experience that made us drop the progress on this matter,
+   but why? Let’s take a look at the actual AST (Abstract Syntax Tree) from the `tree-sitter` parser
+   to find out!
+
+   +html.alt Old parser generated AST
+   .image /assets/posts/treesitter-http-rewrite/01.png
+
+   As you may notice, the tree structure is really poor and not widely tested — /I’m ashamed of
+   my own old code, what a surprise/.
+
+   It is not something like spaghetti code, but something as bad as legacy code — it works, but it
+   is painful to work with. There is no true organization and proper tree branching, and this is
+   what makes working with it an impossible task.
+
+   Every branch comes from the document root node, how could we properly detect which header belongs
+   to what request for example? It is a lot of work and being honest, it is not worth the effort.
+   The same thing applies to… all the AST nodes, John McCarthy would be terrified just by watching
+   it!
+
+** The new design choices
+   Now that we have seen the faults in the current parser AST, let’s check out how we could
+   address them!
+
+   +html.alt New parser generated AST
+   .image /assets/posts/treesitter-http-rewrite/02.png
+
+   I think it goes without saying that the change is really noticeable and makes the work much
+   easier, and it also makes the parser much more understandable when inspecting the tree.
+
+   Since the core of the parser is the requests, it makes sense to group absolutely everything
+   (except the variables and comments, as they are a children of the root node) within said node.
+   This way we also solve the question from the previous example about how we could identify what
+   belongs to which request.
+
+   Now that the parser will be more organized and with a real structure, it can be used efficiently
+   and easily to perform the parsing and extraction of data that `rest.nvim` will need to make HTTP
+   requests for your documents. But wait, these changes are not done yet!
+
+   As the changes are implemented, the post will be updated with some markers to keep notes of each
+   change, and as always in the world of development, there is no ETA but I hope to have quick and
+   uncomplicated progress. And yes, this is the second step necessary for the `rest.nvim` rewrite —
+   the first one is in progress as well, and I will make a post about it later :)

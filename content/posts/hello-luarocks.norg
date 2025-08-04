@@ -1,0 +1,202 @@
+@document.meta
+title: Hello Luarocks
+description: Have you ever thought about having proper and painless management of your plugins in Neovim?
+categories: [
+  neovim
+  luarocks
+  rocks.nvim
+]
+created: 2023-12-23T03:52:47-04:00
+updated: 2025-08-04T06:01:26-0400
+layout: post
+draft: false
+truncate: 123
+truncate_char:
+version: 1.1.1
+@end
+
+Modern times require modern solutions, and modern solutions always make our work easier, so why not
+use LuaRocks in Neovim?
+
+** Introduction
+   The Neovim ecosystem has expanded enormously with the arrival of Lua two years ago, and dependencies have been introduced into plugins to improve them exponentially, however everyone’s experience could be improved even further.
+
+   > /This will be a long but interesting read and will really be worth it, so grab some coffee in your
+   favorite mug!/
+
+** The Neovim plugins ecosystem
+   As already made clear above, the Neovim plugins ecosystem is now huge compared to before Lua came
+   into our lives (and as someone who has used Neovim since `0.3` I can confirm this without a second
+   thought).
+
+   This ecosystem has been greatly nourished since practically the beginning of this decade, which
+   has been marking a before and after in the use of Neovim. With some plugins being born as
+   libraries to serve other plugins, such as {https://github.com/nvim-lua/plenary.nvim}[`plenary.nvim`], and others exposing a public API for
+   interoperability and extensibility like {https://github.com/nvim-telescope/telescope.nvim}[`telescope.nvim`] did.
+
+   This sounds great, right? But like everything, it has its small defects, and in this case they
+   have nothing to do with the code, but with its distribution. So, we can ask ourselves things like
+
+*** What’s wrong with the way of distributing plugins?
+    Maybe this point may not matter to you or seem irrelevant at first, but as you read and
+    understand it, it will make complete sense. But seriously, what’s wrong? Ok, let’s get
+    straight to the point then.
+
+    At Neovim, we have had various plugin managers throughout the Lua era, such as `packer.nvim` or
+    `lazy.nvim`. However, these have not been able to fulfill all the real functions that, for
+    example, a package manager has. One of those functions is the one we will talk about in more
+    depth in this post, dependency management.
+
+**** Dependency management
+     Needless to mention again, plugins in Neovim started implementing dependencies on libraries
+     found in Git repositories or in other plugins. This is great, but the way it is currently
+     implemented in plugin managers is not all that great, and is much less practical to what we
+     could find elsewhere.
+
+     This is mostly because plugin managers use Git repositories as their source for managing
+     plugins, which is not bad, but it is not ideal either.
+
+     Take as an example `telescope.nvim`, which is a plugin that is normally in every user
+     configuration in Neovim, or also `nvim-lspconfig`.
+
+     Using `lazy.nvim`, the telescope setup would look like this:
+
+     @code lua
+     return {
+       'nvim-telescope/telescope.nvim',
+       tag = '0.1.5',
+       dependencies = { 'nvim-lua/plenary.nvim' },
+     }
+     @end
+
+     As we can see, it is known that `telescope.nvim` has a dependency which is `plenary.nvim`, and that
+     is fine, *but you as a user should NOT have to worry about this at all*, since your plugin
+     manager should know how to identify the dependencies of your plugins.
+
+     For simple plugins you won’t see it as important, but with plugins that can have many
+     dependencies (like `nvim-cmp` and its sources, for example) it becomes tedious, and even more so
+     if some of its dependencies also have dependencies.
+
+     This should be addressed from the plugin maintainer side, but it’s not really possible using
+     Git.
+
+**** Semantic versioning and stability
+     Another point to take into account is the actual versioning and the stability that this brings
+     to the plugins. You might think "hey, but Git has tags and plugin managers can use them", and
+     yes, this is true. However, this has some cons:
+
+     - The tag value is hardcoded, so you have to keep track of updates yourself, and if you have a
+     lot of plugins (~20 or more), this process is overwhelming if you don’t have the time to
+     review each one manually.
+     - It is not really an obligation for the distribution of plugins, so many plugin maintainers do
+     not create new releases and tags in their plugins repositories, or they never do one at all,
+     and the versioning is completely lost.
+
+**** Code reuse
+     It was previously discussed that plugins can use libraries to improve the experience, however
+     the only real library currently used is `plenary.nvim`. And it’s really not the best, since
+     even `plenary.nvim` reimplements functionalities that could be found in third-party libraries for
+     Lua with much more mature and superior performance and implementations.
+
+     But this does not stop there, many times we plugin developers have also had to reimplement code
+     ourselves, sometimes creating poor or incomplete reimplementations due to lack of access to
+     libraries written for Lua.
+
+*** LuaRocks to the rescue
+    Maybe you know it, or maybe you don’t, but Lua has a large ecosystem in itself too, and
+    that’s why {https://github.com/luarocks/luarocks}[`luarocks`] exists. It is a package manager for Lua but it is also a {https://luarocks.org}[package hosting
+    service], similar to the NodeJS {https://www.npmjs.com}[`npm.js`] registry.
+
+    This package manager can be used for Neovim as well, in fact, {https://luarocks.org/labels/neovim}[there are already plugins] in this
+    package hosting and new plugins are being added more and more. And, being a full-fledged package
+    manager, it is able to solve all the points mentioned above and alleviate the pain for us, both
+    as plugin developers and regular users.
+
+    Thanks to the {https://github.com/luarocks/luarocks/wiki/Rockspec-format}[`rockspec`] files that luarocks uses to declare the packages and their dependencies,
+    we will never have to worry again as users about the dependencies of the plugins, and whether or
+    not we missed /installing/ something additional, because luarocks also manages packages that need
+    native code compilation!
+
+    But let’s look at an example with {https://github.com/nvim-neorocks/rocks.nvim}[`rocks.nvim`], which is a manager plugin that works under
+    luarocks:
+
+    @code toml
+    [plugins]
+    "telescope.nvim" = "0.1.5"
+    @end
+
+    As we can see, we don’t need to declare that `telescope.nvim` depends on `plenary.nvim` to work,
+    since its dependencies are written in the {https://github.com/luarocks/luarocks/wiki/Rockspec-format}[`rockspec`] and `luarocks` takes care of the tedious work
+    for us. It is much easier and cleaner, yay!
+
+    And as a developer, it’s as simple as specifying the dependency in a Lua table (because
+    `rockspec` files uses Lua syntax, so there’s really nothing difficult to learn) and optionally,
+    the version it needs to work. As simple as that! :p
+
+    Furthermore, luarocks is {https://github.com/Kong/kong/issues/1761}[fully capable of handling different versions of package dependencies]
+    without any problems. In addition to this, luarocks has {https://luarocks.org/about}[no obligation when uploading packages]
+    beyond the code of conduct, and it works directly with your GitHub account, which is very
+    convenient!
+
+    +html.class note
+    > *Note*: I also recommend taking a look at {https://mrcjkb.github.io/posts/2023-01-10-luarocks-tag-release.html}[this blog post] by {https://github.com/mrcjkb}[`@mrcjkb`], which follows up on {https://teto.github.io/posts/2021-09-17-neovim-plugin-luarocks.html}[a series of posts]
+    by {https://github.com/teto}[`@teto`].
+
+**** Packaging and publishing to luarocks
+     Packaging and publishing plugins in luarocks is very easy — seriously, the process takes less
+     than 5 minutes. In the {https://github.com/nvim-neorocks}[`nvim-neorocks`] GitHub organization we have a very simple and intuitive
+     {https://github.com/nvim-neorocks/sample-luarocks-plugin}[guide] written by {https://github.com/vhyrro}[`@vhyrro`] that you can take a look at.
+
+     The process can be completely automated, you don’t even have the need to write your rockspec
+     manually. All this thanks to the hard work that {https://github.com/mrcjkb}[`@mrcjkb`] and
+     {https://github.com/teto}[`@teto`] have done on the {https://github.com/nvim-neorocks/luarocks-tag-release}[`luarocks-tag-release`] CI.
+
+     So, the effort is really low for you as a plugin developer to enjoy all the advantages that
+     luarocks brings, and also make life easier for your users :p
+
+**** New capabilities, more innovation
+     With the arrival of all the capabilities that luarocks offers for the Neovim ecosystem,
+     innovation can go to the clouds and beyond.
+
+     Remember when I said that luarocks could handle code that needed to be compiled? Well,
+     {https://luarocks.org/modules/3rd/image.nvim}[`image.nvim`] is a clear example of why this is good and the advantages this can bring to the
+     world of Neovim. This is a plugin that allows image rendering in Neovim, thanks to the use of
+     {https://github.com/leafo/magick}[`imagemagick`] bindings in Lua.
+
+     @embed html
+     <video class="mx-auto aspect-video" src="https://0x0.st/HgJY.mp4" controls></video>
+     @end
+
+     And this is just an example of what can be achieved with the integration between Neovim and
+     luarocks, I really can’t wait to see what the future brings us :)
+
+**** rocks.nvim, a harmonious way to use luarocks
+     +html.alt rocks.nvim logo
+     +html.class mx-auto h-48 w-96
+     .image https://github.com/nvim-neorocks/rocks.nvim/raw/master/rocks-header.svg
+
+     For the past six months, we have actively been working on {https://github.com/nvim-neorocks/rocks.nvim}[`rocks.nvim`] as the future plugin
+     manager for Neovim. It aims to establish a standard in the ecosystem for the use of luarocks as
+     a means of plugin distribution. The project is already in a stable and completely usable phase,
+     which we will discuss in more depth in another post dedicated specifically to this new plugin
+     manager.
+
+     With {https://github.com/nvim-neorocks/rocks.nvim}[`rocks.nvim`], we have also completely changed the way we handle plugins, adopting a more
+     intuitive approach with less copy/paste for end users through the use of commands. If you
+     haven’t tried it yet, I recommend checking it out :)
+
+     For example, to install `telescope.nvim`, you can use `:Rocks install nvim` and `TAB` autocompletion,
+     which works fuzzily and with impressive performance to search for luarocks packages.
+     Alternatively, you can simply run `:Rocks install telescope.nvim` if you already know the name of
+     the plugin. Everything will be handled internally while you relax, and the plugin will start
+     working as soon as it is installed!
+
+     While other plugin managers like `packer.nvim` have integrated luarocks as well, they do not do
+     so in a self-contained and "native" manner. `packer.nvim`, for instance, uses `hererocks`,
+     introducing a dependency on Python and has not been maintained for years. Some other managers
+     have resisted the idea and completely ignored the advantages and capabilities of luarocks. To
+     be honest, adopting luarocks makes a lot of sense and would help improve the Neovim ecosystem
+     even further, addressing usability issues and fixing the problems mentioned above.
+
+     +html.class note
+     > *Note*: {https://github.com/nvim-neorocks/rocks.nvim}[`rocks.nvim`] is also *completely* extensible!
