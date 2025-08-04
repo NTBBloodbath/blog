@@ -1,13 +1,16 @@
 @document.meta
 title: Hello Luarocks
 description: Have you ever thought about having proper and painless management of your plugins in Neovim?
+authors: [
+  amartin
+]
 categories: [
   neovim
   luarocks
   rocks.nvim
 ]
 created: 2023-12-23T03:52:47-04:00
-updated: 2025-08-04T06:01:26-0400
+updated: 2025-08-04T06:42:51-0400
 layout: post
 draft: false
 truncate: 123

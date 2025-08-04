@@ -1,0 +1,239 @@
+@document.meta
+title: Hello Http Parser
+description: Let’s welcome a renewed, improved and optimized parser ready to join the party
+authors: [
+  amartin
+]
+categories: [
+  neovim
+  tree-sitter
+  devlog
+]
+created: 2024-01-25T17:00:24-04:00
+updated: 2025-08-04T06:42:51-0400
+layout: post
+draft: false
+truncate: 116
+truncate_char:
+version: 1.1.1
+@end
+
+/Finally, after days of development and tweaking, it’s alive, fully functional, and ready to get
+the job done for us!/
+
+** Introduction
+   A month ago, I published a post about {:/posts/treesitter-http-rewrite:}[the actual issues in the HTTP tree-sitter parser] and how to
+   address them by rewriting the entire parser.
+
+   All these issues have been fixed since then in a new branch called {https://github.com/rest-nvim/tree-sitter-http/tree/next}[`next`] in the repository that
+   holds all the new breaking changes in the parser and that will be merged into the main branch
+   once the time has come and the parser rewrite is bullet-proof.
+
+   Now that it is alive and working, it is time for us to review the changes and how we improved the parser!
+
+** Hello, robust structure!
+   Let’s start from the very beginning, step by step, and analyze the new parser structure first.
+   That means, checking what the new *A*bstract *S*yntax *T*ree (AST) looks like!
+
+   But before that, we need to look at a simple `POST` request for everything to make sense.
+   @code json
+   POST https://reqres.in/api/users
+   Content-Type: application/json
+
+   {
+       "name": "morpheus",
+       "job": "leader",
+       "array": ["a", "b", "c"],
+       "object_ugly_closing": {
+         "some_key": "some_value"
+       }
+   }
+   @end
+
+   Now, this is the produced AST (I’ve stripped down the `json_body` AST to improve readability):
+   @code scm
+   (document
+     (request
+       (method)
+       (target_url
+         (scheme)
+         (host
+           (identifier))
+         (path
+           (identifier)
+           (identifier)))
+       (header
+         name: (name)
+         value: (value))
+       (json_body)))
+   @end
+
+   Simple and understandable, right? The request belongs to the document, and everything else
+   belongs to that request (headers, body, etc.). But not everything was so beautiful before, so
+   let’s take a look at the previous AST so that we understand well how everything has improved:
+
+   @code scm
+   (document
+     (request
+       (method
+         (const_spec))
+       (target_url
+         (scheme)
+         (host
+           (identifier))
+         (path
+           (identifier)
+           (identifier))))
+     (header
+       name: (name)
+       value: (value))
+     (json_body))
+   @end
+
+   In this old state, everything is separate and there is no efficient way to know if a header is
+   part of a request, and the same applies to the request body.
+
+   This makes the task of using the parser for what it was made difficult, /and I dare say even
+   impossible/.
+
+** Improvements and optimizations
+   +html.class border-none! mt-0
+*** Improvements
+    The parser has been adapted to the latest needs and syntax of {https://github.com/rest-nvim/rest.nvim}[`rest.nvim`], the plugin for which it
+    was created. Thus adding new functionalities that did not exist before, such as script variables.
+
+**** Script variables
+     Here we have an example of the script variables for the lazy:
+
+     @code lua
+     --{%
+
+     local body = context.json_decode(context.result.body)
+
+     context.set_env("userId", body.userId)
+     context.set_env("postId", body.id)
+
+     --%}
+     @end
+
+     This is a feature of {https://github.com/rest-nvim/rest.nvim}[`rest.nvim`] that I will explain in detail later in another post, but for now
+     we can say that it is an interactive way of using the result of one request within another in
+     the same HTTP document, very convenient, right?
+
+     And if you have been using it before, you may notice that it is a little different than what it
+     was before. This will be explained in detail in the {# Breaking changes} section, so don’t worry!
+
+**** Variables, everywhere
+     Just to clarify, we already had the variables in the parser, but they were not a first class
+     citizen, and internally in the parser they had no… relevance. Fortunately that has changed!
+
+     Variables are now allowed everywhere, except of course as header names. This way, you can use
+     variables to shorten time with endpoints, URLs, common values between requests, etc.
+
+**** Other improvements
+     - Add support for `HTTP/3`.
+     - Add tree-sitter tests, gotta keep us safe!
+     - Add support for `JSON` arrays as the request body.
+     - Improve `localhost:port` detection.
+     - Finally enable `XML` and `GraphQL` injections.
+     - 95% of issues on GitHub have been resolved (not closed yet!).
+     - Allow adding whitespaces around variables to improve readability (both `{{password}}` and `{{
+     password }}` are now valid).
+     - Allow multiple bodies in the requests, in case you need to mix `JSON` and `GraphQL`!
+
+*** Optimizations
+    The parser has grown enormously in size compared to its previous version (don’t worry, it
+    still weighs less than `200KiB`), however, it should be much faster than before!
+
+    Among the performance changes, we can find:
+
+    - Remove /almost/ all the precedence rules, as currently they cause no clashes.
+    - Refactor all the `/(this|or|that)/` regex into `choice()` with strings.
+    - Refactor all the `optional(repeat1())` to `repeat()` as the previous iteration is equal to just
+    `optional()`, and thus redundant.
+
+** Breaking changes
+   Being a rewrite that seeks improvements, some changes have been made that break with the previous
+   version. These are the following.
+
+*** Script variables delimiters
+    As mentioned above, the syntax of script variables was changed, but why?
+
+    When adding Lua injections to the `(script_variable)` node, false errors were created due to the
+    way tree-sitter injections work, because the delimiters were `{% and %}`, which was recognized
+    as part of the injection code and is not valid Lua syntax.
+
+    It is for this reason that delimiters have become Lua comments (`--\{%` and `--%\}` respectively).
+    An easy change to adopt, with little effort and that works perfectly :D
+
+*** Document variables typing
+    > /In case you’re wondering, no. We don’t have strong typing, we’re not using a complex
+    language!/
+
+    By typing we mean that, previously, the value of the variables was a flat `(identifier)` node
+    that, although it worked well for us, would be torture when expanding the variables because, how
+    would we know if we want `12345` be a number or a string during expansion?
+
+    This is why now the values of the variables must be one of these three types, which we all
+    already know:
+
+    - `string`
+    - `number`
+    - `boolean`
+
+    For example:
+    @code json
+    @username = "NTBBloodbath"
+    @admin = true
+
+    POST https://foo.com/api/users/create
+    Content-Type: application/json
+
+    {
+      "username": "{{ username }}",
+      "is_admin": "{{ admin }}"
+    }
+    @end
+
+    +html.class note
+    > *Note*: don’t worry about values inside strings in the body, {https://github.com/rest-nvim/rest.nvim}[`rest.nvim`] will make sure
+    everything is as it should during internal parsing. That `"{{ true }}"` will become simply `true`
+    thanks to the variable types and so on!
+
+    ___
+
+    Since we’ve seen all these changes, I’m afraid to say that they are not yet available in
+    {https://github.com/nvim-treesitter/nvim-treesitter}[`nvim-treesitter`] as they are in the
+    {https://github.com/rest-nvim/tree-sitter-http/tree/next}[`next`] branch we mentioned above. However, don’t let this stop you!
+
+    If you want to use this version of the parser for testing, you can do so by manually changing
+    the branch that uses {https://github.com/nvim-treesitter/nvim-treesitter}[`nvim-treesitter`] with the following code:
+
+    @code lua
+    local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+    parser_config.http = vim.tbl_deep_extend("force", parser_config.http, {
+      install_info = { branch = "next" },
+    })
+    @end
+
+    Then, save your changes, relaunch Neovim, run `:TSInstall http` and enter `y` in the reinstallation
+    prompt and relaunch Neovim /again/.
+
+    +html.class important
+    > *Important*: You may have problems with the `highlights.scm` and `injections.scm` queries if you use
+    it with `rest.nvim` since it currently has the old versions of these changes. To fix it, change
+    the queries with `:TSEditQuery` with those found in {https://github.com/rest-nvim/tree-sitter-http/tree/next}[`next`]
+
+** When is it going to be merged?
+   You’re probably wondering this after reading the above, so I have the answer for you!
+
+   After the parsing job on the rewrite of {https://github.com/rest-nvim/rest.nvim}[`rest.nvim`] is done and no errors are found in the parser,
+   and the rewrite of {https://github.com/rest-nvim/rest.nvim}[`rest.nvim`] is fully functional, I will merge the parser changes.
+
+   Unfortunately this does not have a precise ETA /yet/, but I can assure you that it will be sooner
+   than you think!
+
+** Special thanks
+   And finally, I want to give special thanks to {https://github.com/boltlessengineer}[`@boltlessengineer`] and {https://github.com/vhyrro}[`@vhyrro`], who gave me a hand
+   when I had questions regarding tree-sitter and the documentation was not very helpful for me :P

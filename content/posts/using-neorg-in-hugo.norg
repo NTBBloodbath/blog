@@ -9,7 +9,7 @@ categories: [
   hugo
 ]
 created: 2022-12-24T16:47:10-04:00
-updated: 2025-08-04T05:40:36-0400
+updated: 2025-08-04T06:29:32-0400
 draft: false
 layout: post
 truncate: 256
@@ -18,8 +18,7 @@ version: 1.1.1
 
 /Hear me now, what if we embed {https://github.com/nvim-neorg/neorg}[Neorg] in {https://gohugo.io}[Hugo]?/ Yes, it is possible /and doable/. However, Neorg is not
 going to be used to render the content directly. In this post we are going to deep dive into this
-topic, and some future ideas to improve
-the actual behavior.
+topic, and some future ideas to improve the actual behavior.
 
 +html.class note
 > *Note*: Notice that this post *assumes* that you already have a working blog using Hugo, no matters if
