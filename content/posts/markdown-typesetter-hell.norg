@@ -1,0 +1,75 @@
+@document.meta
+title: Markdown: A Typesetter's Personal Hell
+description: What at first seemed like the perfect markup solution turned out to be a hellish, fragmented rabbit hole
+authors: [
+  amartin
+]
+categories: [
+  rant
+]
+created: 2025-08-09T20:49:16-04:00
+updated: 2025-08-10T04:12:14-0400
+draft: true
+layout: post
+truncate: 104
+version: 1.1.1
+@end
+
+Every so often, a tool comes along that's hailed as a revolution in simplicity. Markdown was one of
+them. Birthed from a desire to write for the web back in the early 2000s without the fuss of HTML
+tags /and give it back to writers/, it promised a clean, readable, and straightforward future. For a
+quick forum post or a `README` file on VCS forges such as GitHub, fine. I'll grant it that. But for
+anything destined for professional publication, for anything that requires *structure*, *consistency*,
+and *semantic integrity*? Frankly, it's a disaster.
+
+Markdown is a solution in search of a problem it /spectacularly/ fails to solve, all while creating a
+bigger, more insidious one for anyone who /actually/ cares about the final, published word. It is the
+typesetting equivalent of being handed a bucket of LEGOs and being told to build a long-bearing wall.
+What follows is not a comprehensive takedonw, but a programmer's rant over a syntax that has duped
+the world into believing that “simple” is a synonym for “good”.
+
+** The Grand Illusion: A “Standard” That Isn't
+   Let's get one thing straight, because this is where the /whole/ rotten edifice begins to crumble.
+   The word “standard” implies a certain... well, /standard/. A bedrock of agreement. A promise
+   that what I write here will look the same over there. Markdown's “standard” is *none* of those
+   things.
+
+   I'm not a religious person, but if I were, I'd say that Markdown's first sin was the lie that it
+   pretended to be a single, definable /thing/. It wasn't. It still isn't. What John Gruber unleashed
+   on the world back in 2004 was less a technical specification and more a [charmingly vague blog
+   post]{https://daringfireball.net/projects/markdown/} with a side of Perl script and lots of ambiguity. It was a philosophy, a suggestion, an
+   “I'm sure this will be fine” shrug into the digital void. The problem is, for anything to
+   actually work consistently, you need rules. Hard rules. Not just a vibe.
+
+   Becuase the original recipe was missing half the ingredients, everyone who used it had to
+   /immediately/ start patching it up. What you think of as “Markdown” isn't Markdown. It's Markdown
+   plus a whole lot of digital duct tape. It's a fractured mess of dialects, a fucking Tower of
+   Babel in real life built from asterisks and hashtags.
+
+   An entire committee had to be formed—a goddamn committee!—just to try and hammer out a
+   baseline called [CommonMark]{https://commonmark.org/}, because the original spec was so damn ambiguous that two different
+   parsers could look at the same text and produce entirely /different/ results (see the [CommonMark
+   Spec]{https://spec.commonmark.org/}). And that's before we even get to the 800-kilogram gorilla, [Github Flavored Markdown]{https://github.github.com/gfm/} (GFM),
+   or the mad scientist's toolkit in Pandoc's version. Each one has its own special flavor of
+   bullshit, a delightful topic we'll dissect later on as if we were running a `git bisect` to find
+   out which damn commit broke the whole piece of software (spoiler: it was every /single/ commit).
+
+   You think I'm exaggerating? Fine. Try writing this perfectly simple snippet:
+   @code markdown
+   * Here is a list item.
+     * And a nested item.
+
+             With a bit of indented text.
+   @end
+
+   How does that render? Is the indented text a code block? Or just a paragraph attached to the
+   nested item? The answer, my friend, is a glorious “[mayhaps]{https://www.urbandictionary.com/define.php?term=Mayhaps.}”. It depends entirely on which
+   pastor is preaching from which Markdown bible. One parser will give you a neat code block out of
+   nowhere, another will give you a plain paragraph (as I think it should), and a third might just
+   throw up its hands and break the list entirely. You can also see it as Russian roulette, except
+   instead of shooting yourself, you shoot your document. Fantastic, don't you think?
+
+   So the very first promise—that you can write a simple text file and trust it to be the same
+   everywhere—is a filthy lie. Your document isn't truly portable. It's a prisoner of whatever
+   platform you wrote it on. It’s not a standard. It's a suggestion that got wildly out of hand,
+   leaving a trail of broken formatting and shattered expectations in its wake.
