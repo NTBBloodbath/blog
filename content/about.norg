@@ -30,12 +30,23 @@ version: 1.1.1
   @end
   If you want to contact me you can find me on multiple platforms!
 
-  - Matrix - `@ntbbloodbath.matrix.org`
-  - Discord - `@ntbbloodbath`
+  - *Matrix* - `@ntbbloodbath.matrix.org`
+  - *Discord* - `@ntbbloodbath`
+  - *Email* - `bloodbathalchemist@protonmail.com`
 
-  +html.class note
-  > *Note*: /You can also find an email address on my GitHub and Codeberg profiles in
-    case you want a more formal way to reach me./
+  @embed html
+  <h2><i class="ti ti-key"></i> GPG Public Key</h2>
+  @end
+  Download my {:/assets/ntbbloodbath_pub.asc:}[GPG public key] for encrypted communication.
+
+  *Fingerprint*:
+
+  `4ABD D342 5BB7 F50A F7B9  10CE 18D6 730B C846 AAC5`
+
+  After importing the key, verify the fingerprint matches using GnuPG.
+  @code bash
+  gpg --fingerprint bloodbathalchemist@protonmail.com
+  @end
 
   @embed html
   <h2><i class="ti ti-tools"></i> Tools and stack</h2>
