@@ -115,13 +115,12 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.9.0/mermaid.min.js"></script>
   {% endif %}
 
-  {# Goatcounter #}
+  {# Privacy-friendly analytics by Plausible #}
+  <script async src="https://stats.amartin.beer/js/pa-YgKKMCmDaclU8p7BQRdiz.js"></script>
   <script>
-      // Only load on production environment
-      if (window.location.host !== 'amartin.beer')
-          window.goatcounter = {no_onload: true}
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
   </script>
-  <script data-goatcounter="https://stats.amartin.beer/count" async src="//stats.amartin.beer/count.js"></script>
 
   {# Icons #}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.28.1/tabler-icons.min.css">
