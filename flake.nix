@@ -2,15 +2,15 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable&shallow=1";
-    flake-utils.url = "github:numtide/flake-utils?shallow=1";
-    norgolith.url = "github:NTBBloodbath/norgolith?shallow=1";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    # norgolith.url = "github:NTBBloodbath/norgolith?shallow=1";
   };
 
   outputs = {
     nixpkgs,
     flake-utils,
-    norgolith,
+    # norgolith,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -25,7 +25,8 @@
             tailwindcss_4
             tailwindcss-language-server
             mprocs # Run multiple commands in parallel
-            norgolith.packages.${system}.default
+            norgolith
+            # norgolith.packages.${system}.default
           ];
         };
       });
