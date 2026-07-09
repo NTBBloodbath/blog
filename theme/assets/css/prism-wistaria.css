@@ -1,0 +1,676 @@
+/**
+ * Wistaria theme for PrismJS
+ * Light mode default - dark mode via .dark class
+ *
+ * Light syntax color roles:
+ *   comments    → #938da9  (muted violet-grey)
+ *   punctuation → #48435c  (dark on-surface)
+ *   keywords    → #4f3298  (primary lavender)
+ *   strings     → #005048  (secondary teal)
+ *   numbers     → #312d45  (tertiary deep)
+ *   functions   → #381680  (on-primary)
+ *   operators   → #48435c  (on-surface-variant)
+ *   deleted     → #690005  (error)
+ *
+ * Dark syntax color roles:
+ *   comments    → #948e9d  (outline — grey-violet, pushed back)
+ *   punctuation → #cbc4d4  (on-surface-variant — subtle)
+ *   keywords    → #cfbdff  (primary — lavender, the defining accent)
+ *   strings     → #74d7c8  (secondary — teal, warm contrast to lavender)
+ *   numbers     → #cac2e1  (tertiary — soft lilac grey)
+ *   functions   → #9b7fe8  (primary-container — medium violet)
+ *   operators   → #cbc4d4  (on-surface-variant)
+ *   deleted     → #ffb4ab  (error)
+ */
+
+/* =============================================================================
+   Base — layout, typography (shared)
+   ============================================================================= */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  font-family: var(
+    --font-mono,
+    "Martian Mono Variable",
+    ui-monospace,
+    monospace
+  );
+  font-size: var(--text-code, 0.875rem);
+  line-height: var(--leading-code, 1.6);
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  tab-size: 2;
+  hyphens: none;
+  text-shadow: none;
+}
+
+@media print {
+  code[class*="language-"],
+  pre[class*="language-"] {
+    text-shadow: none;
+  }
+}
+
+/* =============================================================================
+   Light mode (default)
+   ============================================================================= */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  background: #e9e6f2;
+  color: #2b273e;
+}
+
+code[class*="language-"]::selection,
+code[class*="language-"] *::selection,
+pre[class*="language-"] *::selection {
+  background: #d9d5e7;
+  color: inherit;
+}
+
+pre[class*="language-"] {
+  padding: 1.25em 1.5em;
+  margin: var(--space-6, 1.5rem) 0;
+  overflow: auto;
+  border-radius: var(--radius-lg, 0.75rem);
+  border: 1px solid #cbc4d4;
+}
+
+:not(pre) > code[class*="language-"] {
+  background: #ddd9ea;
+  color: #4f3298;
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm, 0.25rem);
+  white-space: normal;
+}
+
+/* Tokens — light */
+
+.token.comment,
+.token.prolog,
+.token.cdata {
+  color: #938da9;
+  font-style: italic;
+}
+
+.token.doctype,
+.token.punctuation {
+  color: #48435c;
+}
+
+.token.entity {
+  color: #48435c;
+  cursor: help;
+}
+
+.token.namespace {
+  opacity: 0.8;
+}
+
+.token.keyword,
+.token.atrule {
+  color: #4f3298;
+}
+
+.token.attr-name,
+.token.class-name,
+.token.constant,
+.token.boolean,
+.token.number {
+  color: #312d45;
+}
+
+.token.function {
+  color: #381680;
+}
+
+.token.selector,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted,
+.token.regex {
+  color: #005048;
+}
+
+.token.attr-value,
+.token.attr-value > .token.punctuation {
+  color: #005048;
+}
+
+.token.tag {
+  color: #4f3298;
+}
+
+.token.property {
+  color: #48435c;
+}
+
+.token.operator,
+.token.variable {
+  color: #48435c;
+}
+
+.token.url {
+  color: #005048;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.token.symbol,
+.token.deleted,
+.token.important {
+  color: #690005;
+}
+
+.token.bold {
+  font-weight: 700;
+}
+
+.token.comment,
+.token.italic {
+  font-style: italic;
+}
+
+/* =============================================================================
+   Dark mode (.dark)
+   ============================================================================= */
+
+.dark code[class*="language-"],
+.dark pre[class*="language-"] {
+  background: #0f0d13;
+  color: #e6e0ea;
+}
+
+.dark code[class*="language-"]::selection,
+.dark code[class*="language-"] *::selection,
+.dark pre[class*="language-"] *::selection {
+  background: #2b2930;
+  color: inherit;
+}
+
+.dark pre[class*="language-"] {
+  border-color: #211f25;
+}
+
+.dark :not(pre) > code[class*="language-"] {
+  background: #1d1b21;
+  color: #cfbdff;
+}
+
+/* Tokens — dark */
+
+.dark .token.comment,
+.dark .token.prolog,
+.dark .token.cdata {
+  color: #948e9d;
+}
+
+.dark .token.doctype,
+.dark .token.punctuation {
+  color: #cbc4d4;
+}
+
+.dark .token.entity {
+  color: #cbc4d4;
+}
+
+.dark .token.keyword,
+.dark .token.atrule {
+  color: #cfbdff;
+}
+
+.dark .token.attr-name,
+.dark .token.class-name,
+.dark .token.constant,
+.dark .token.boolean,
+.dark .token.number {
+  color: #cac2e1;
+}
+
+.dark .token.function {
+  color: #9b7fe8;
+}
+
+.dark .token.selector,
+.dark .token.string,
+.dark .token.char,
+.dark .token.builtin,
+.dark .token.inserted,
+.dark .token.regex {
+  color: #74d7c8;
+}
+
+.dark .token.attr-value,
+.dark .token.attr-value > .token.punctuation {
+  color: #74d7c8;
+}
+
+.dark .token.tag {
+  color: #cfbdff;
+}
+
+.dark .token.property {
+  color: #cbc4d4;
+}
+
+.dark .token.operator,
+.dark .token.variable {
+  color: #cbc4d4;
+}
+
+.dark .token.url {
+  color: #74d7c8;
+}
+
+.dark .token.symbol,
+.dark .token.deleted,
+.dark .token.important {
+  color: #ffb4ab;
+}
+
+/* =============================================================================
+   Language-specific overrides
+   ============================================================================= */
+
+/* HTML */
+.token.attr-value > .token.punctuation.attr-equals,
+.token.special-attr > .token.attr-value > .token.value.css {
+  color: #48435c;
+}
+
+.dark .token.attr-value > .token.punctuation.attr-equals,
+.dark .token.special-attr > .token.attr-value > .token.value.css {
+  color: #cbc4d4;
+}
+
+/* CSS */
+.language-css .token.selector {
+  color: #4f3298;
+}
+
+.language-css .token.property {
+  color: #48435c;
+}
+
+.language-css .token.function,
+.language-css .token.url > .token.function {
+  color: #381680;
+}
+
+.language-css .token.url > .token.string.url {
+  color: #005048;
+}
+
+.language-css .token.important,
+.language-css .token.atrule .token.rule {
+  color: #4f3298;
+}
+
+.dark .language-css .token.selector {
+  color: #cfbdff;
+}
+
+.dark .language-css .token.property {
+  color: #cbc4d4;
+}
+
+.dark .language-css .token.function,
+.dark .language-css .token.url > .token.function {
+  color: #9b7fe8;
+}
+
+.dark .language-css .token.url > .token.string.url {
+  color: #74d7c8;
+}
+
+.dark .language-css .token.important,
+.dark .language-css .token.atrule .token.rule {
+  color: #cfbdff;
+}
+
+/* JavaScript */
+.language-javascript .token.operator {
+  color: #48435c;
+}
+
+.language-javascript
+  .token.template-string
+  > .token.interpolation
+  > .token.interpolation-punctuation.punctuation {
+  color: #690005;
+}
+
+.dark .language-javascript .token.operator {
+  color: #cfbdff;
+}
+
+.dark .language-javascript
+  .token.template-string
+  > .token.interpolation
+  > .token.interpolation-punctuation.punctuation {
+  color: #ffb4ab;
+}
+
+/* JSON */
+.language-json .token.operator {
+  color: #48435c;
+}
+
+.language-json .token.null.keyword {
+  color: #312d45;
+}
+
+.dark .language-json .token.operator {
+  color: #cbc4d4;
+}
+
+.dark .language-json .token.null.keyword {
+  color: #cac2e1;
+}
+
+/* Markdown */
+.language-markdown .token.url,
+.language-markdown .token.url > .token.operator,
+.language-markdown .token.url-reference.url > .token.string {
+  color: #48435c;
+}
+
+.language-markdown .token.url > .token.content {
+  color: #381680;
+}
+
+.language-markdown .token.url > .token.url,
+.language-markdown .token.url-reference.url {
+  color: #005048;
+}
+
+.language-markdown .token.blockquote.punctuation,
+.language-markdown .token.hr.punctuation {
+  color: #938da9;
+  font-style: italic;
+}
+
+.language-markdown .token.code-snippet {
+  color: #005048;
+}
+
+.language-markdown .token.bold .token.content {
+  color: #312d45;
+}
+
+.language-markdown .token.italic .token.content {
+  color: #4f3298;
+}
+
+.language-markdown .token.strike .token.content,
+.language-markdown .token.strike .token.punctuation,
+.language-markdown .token.list.punctuation,
+.language-markdown .token.title.important > .token.punctuation {
+  color: #690005;
+}
+
+.dark .language-markdown .token.url,
+.dark .language-markdown .token.url > .token.operator,
+.dark .language-markdown .token.url-reference.url > .token.string {
+  color: #cbc4d4;
+}
+
+.dark .language-markdown .token.url > .token.content {
+  color: #9b7fe8;
+}
+
+.dark .language-markdown .token.url > .token.url,
+.dark .language-markdown .token.url-reference.url {
+  color: #74d7c8;
+}
+
+.dark .language-markdown .token.blockquote.punctuation,
+.dark .language-markdown .token.hr.punctuation {
+  color: #948e9d;
+  font-style: italic;
+}
+
+.dark .language-markdown .token.code-snippet {
+  color: #74d7c8;
+}
+
+.dark .language-markdown .token.bold .token.content {
+  color: #cac2e1;
+}
+
+.dark .language-markdown .token.italic .token.content {
+  color: #cfbdff;
+}
+
+.dark .language-markdown .token.strike .token.content,
+.dark .language-markdown .token.strike .token.punctuation,
+.dark .language-markdown .token.list.punctuation,
+.dark .language-markdown .token.title.important > .token.punctuation {
+  color: #ffb4ab;
+}
+
+/* =============================================================================
+   Plugin overrides
+   ============================================================================= */
+
+/* --- Line Numbers plugin --- */
+
+.line-numbers .line-numbers-rows,
+.command-line .command-line-prompt {
+  border-right: 1px solid #cbc4d4;
+}
+
+.line-numbers .line-numbers-rows > span:before,
+.command-line .command-line-prompt > span:before {
+  color: #938da9;
+}
+
+.dark .line-numbers .line-numbers-rows,
+.dark .command-line .command-line-prompt {
+  border-right: 1px solid #211f25;
+}
+
+.dark .line-numbers .line-numbers-rows > span:before,
+.dark .command-line .command-line-prompt > span:before {
+  color: #494552;
+}
+
+/* --- Line Highlight plugin --- */
+
+.line-highlight.line-highlight {
+  background: rgb(79 50 152 / 0.06);
+}
+
+.line-highlight.line-highlight:before,
+.line-highlight.line-highlight[data-end]:after {
+  background: #ddd9ea;
+  color: #48435c;
+  padding: 0.1em 0.6em;
+  border-radius: var(--radius-sm, 0.25rem);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgb(0 0 0 / 0.15));
+}
+
+.dark .line-highlight.line-highlight {
+  background: rgb(207 189 255 / 0.05);
+}
+
+.dark .line-highlight.line-highlight:before,
+.dark .line-highlight.line-highlight[data-end]:after {
+  background: #2b2930;
+  color: #cbc4d4;
+}
+
+/* Linkable line numbers hover */
+pre[id].linkable-line-numbers span.line-numbers-rows > span:hover:before {
+  background: rgb(79 50 152 / 0.06);
+}
+
+.dark pre[id].linkable-line-numbers span.line-numbers-rows > span:hover:before {
+  background: rgb(207 189 255 / 0.05);
+}
+
+/* --- Toolbar plugin (copy button area) --- */
+
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span {
+  background: #ddd9ea;
+  color: #48435c;
+  padding: 0.15em 0.5em;
+  border-radius: var(--radius-sm, 0.25rem);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: var(--text-xs, 0.75rem);
+  border: 1px solid #cbc4d4;
+}
+
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:focus,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:focus,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:hover,
+div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:focus {
+  background: #d9d5e7;
+  color: #2b273e;
+}
+
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > button,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > a,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > span {
+  background: #2b2930;
+  color: #948e9d;
+  border-color: #494552;
+}
+
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:hover,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > button:focus,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:hover,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > a:focus,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:hover,
+.dark div.code-toolbar > .toolbar.toolbar > .toolbar-item > span:focus {
+  background: #36343b;
+  color: #e6e0ea;
+}
+
+/* --- Diff Highlight plugin --- */
+
+pre.diff-highlight > code .token.token.deleted:not(.prefix),
+pre > code.diff-highlight .token.token.deleted:not(.prefix) {
+  background: rgb(105 0 5 / 0.08);
+}
+
+pre.diff-highlight > code .token.token.deleted:not(.prefix)::selection,
+pre.diff-highlight > code .token.token.deleted:not(.prefix) *::selection,
+pre > code.diff-highlight .token.token.deleted:not(.prefix)::selection,
+pre > code.diff-highlight .token.token.deleted:not(.prefix) *::selection {
+  background: rgb(105 0 5 / 0.16);
+}
+
+pre.diff-highlight > code .token.token.inserted:not(.prefix),
+pre > code.diff-highlight .token.token.inserted:not(.prefix) {
+  background: rgb(0 80 72 / 0.08);
+}
+
+pre.diff-highlight > code .token.token.inserted:not(.prefix)::selection,
+pre.diff-highlight > code .token.token.inserted:not(.prefix) *::selection,
+pre > code.diff-highlight .token.token.inserted:not(.prefix)::selection,
+pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
+  background: rgb(0 80 72 / 0.16);
+}
+
+.dark pre.diff-highlight > code .token.token.deleted:not(.prefix),
+.dark pre > code.diff-highlight .token.token.deleted:not(.prefix) {
+  background: rgb(255 180 171 / 0.12);
+}
+
+.dark pre.diff-highlight > code .token.token.deleted:not(.prefix)::selection,
+.dark pre.diff-highlight > code .token.token.deleted:not(.prefix) *::selection,
+.dark pre > code.diff-highlight .token.token.deleted:not(.prefix)::selection,
+.dark pre > code.diff-highlight .token.token.deleted:not(.prefix) *::selection {
+  background: rgb(255 180 171 / 0.22);
+}
+
+.dark pre.diff-highlight > code .token.token.inserted:not(.prefix),
+.dark pre > code.diff-highlight .token.token.inserted:not(.prefix) {
+  background: rgb(116 215 200 / 0.12);
+}
+
+.dark pre.diff-highlight > code .token.token.inserted:not(.prefix)::selection,
+.dark pre.diff-highlight > code .token.token.inserted:not(.prefix) *::selection,
+.dark pre > code.diff-highlight .token.token.inserted:not(.prefix)::selection,
+.dark pre > code.diff-highlight .token.token.inserted:not(.prefix) *::selection {
+  background: rgb(116 215 200 / 0.22);
+}
+
+/* --- Rainbow Braces plugin --- */
+
+.rainbow-braces .token.token.punctuation.brace-level-1,
+.rainbow-braces .token.token.punctuation.brace-level-5,
+.rainbow-braces .token.token.punctuation.brace-level-9 {
+  color: #4f3298;
+}
+
+.rainbow-braces .token.token.punctuation.brace-level-2,
+.rainbow-braces .token.token.punctuation.brace-level-6,
+.rainbow-braces .token.token.punctuation.brace-level-10 {
+  color: #005048;
+}
+
+.rainbow-braces .token.token.punctuation.brace-level-3,
+.rainbow-braces .token.token.punctuation.brace-level-7,
+.rainbow-braces .token.token.punctuation.brace-level-11 {
+  color: #381680;
+}
+
+.rainbow-braces .token.token.punctuation.brace-level-4,
+.rainbow-braces .token.token.punctuation.brace-level-8,
+.rainbow-braces .token.token.punctuation.brace-level-12 {
+  color: #312d45;
+}
+
+.dark .rainbow-braces .token.token.punctuation.brace-level-1,
+.dark .rainbow-braces .token.token.punctuation.brace-level-5,
+.dark .rainbow-braces .token.token.punctuation.brace-level-9 {
+  color: #cfbdff;
+}
+
+.dark .rainbow-braces .token.token.punctuation.brace-level-2,
+.dark .rainbow-braces .token.token.punctuation.brace-level-6,
+.dark .rainbow-braces .token.token.punctuation.brace-level-10 {
+  color: #74d7c8;
+}
+
+.dark .rainbow-braces .token.token.punctuation.brace-level-3,
+.dark .rainbow-braces .token.token.punctuation.brace-level-7,
+.dark .rainbow-braces .token.token.punctuation.brace-level-11 {
+  color: #9b7fe8;
+}
+
+.dark .rainbow-braces .token.token.punctuation.brace-level-4,
+.dark .rainbow-braces .token.token.punctuation.brace-level-8,
+.dark .rainbow-braces .token.token.punctuation.brace-level-12 {
+  color: #cac2e1;
+}
+
+/* --- Show Invisibles plugin --- */
+
+.token.token.tab:not(:empty):before,
+.token.token.cr:before,
+.token.token.lf:before,
+.token.token.space:before {
+  color: rgb(79 50 152 / 0.2);
+  text-shadow: none;
+}
+
+.dark .token.token.tab:not(:empty):before,
+.dark .token.token.cr:before,
+.dark .token.token.lf:before,
+.dark .token.token.space:before {
+  color: rgb(148 142 157 / 0.25);
+}
+
+
+

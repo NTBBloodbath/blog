@@ -2,32 +2,35 @@
 {% block seo_tags %}
 <meta property="og:title" content="Categories - {{ config.title | title }}" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="{{ config.rootUrl }}/categories" />
+<meta property="og:url" content="{{ config.rootUrl }}/library" />
 <meta property="og:description" content="Posts categories" />
 <meta property="og:site_name" content="{{ config.title }}" />
 <meta property="og:locale" content="{{ config.language }}" />
-{# TODO: add support for og:image using metadata #}
-<link rel="canonical" href="{{ config.rootUrl }}/categories" />
+<link rel="canonical" href="{{ config.rootUrl }}/library" />
 <meta name="robots" content="index, follow" />
 {% endblock seo_tags %}
-{% block title %}Categories{% endblock title %}
+{% block title %}Library{% endblock title %}
 {% block content %}
 <div>
-  <h1>Categories</h1>
-  <p class="text-sm text-text/70"><i>All the categories used in posts.</i></p>
-  <ul class="mt-6 pt-6 border-t border-t-base-alt dark:border-t-[#39394b]">
+  <h1 class="mt-0! md:mt-4!">Library</h1>
+  <p class="text-sm text-muted italic">All the categories used in posts.</p>
+  <div class="flex flex-wrap gap-2 mt-6 pt-6 border-t border-t-border">
     {% for category in categories | sort %}
-      {%- set_global cat_posts = 0 -%}
-      {% for post in posts %}
-        {% if category in post.categories %}
-          {%- set_global cat_posts = cat_posts + 1 -%}
-        {% endif %}
-      {% endfor %}
-      <li>
-        <a class="font-mono text-lg no-underline! hover:underline! hover:decoration-dashed" href="/categories/{{ category }}">{{ category }}</a>
-        <span class="text-grey">({{ cat_posts }} post{{ cat_posts | pluralize }})</span>
-      </li>
+      {% set cat_posts = [post for post in posts if category in post.categories] | length %}
+      {% if config.extra.tags and category in config.extra.tags %}
+        {% set cat_color = config.extra.tags[category] %}
+      {% else %}
+        {% set cat_color = "" %}
+      {% endif %}
+      <a
+        {% if cat_color %}style="--tag-color: {% if cat_color is starting_with(pat='#') or cat_color is starting_with(pat='rgb') or cat_color is starting_with(pat='hsl') or cat_color is starting_with(pat='oklch') %}{{ cat_color }}{% else %}var(--color-{{ cat_color }}){% endif %}"{% endif %}
+        class="w-fit no-underline! hover:no-underline! text-sm px-4 py-2 rounded-full {% if cat_color %}bg-[color-mix(in_oklab,var(--tag-color)_25%,transparent)] text-(--tag-color) hover:bg-[color-mix(in_oklab,var(--tag-color)_50%,transparent)]{% else %}bg-surface/80 dark:bg-surface/60 text-muted hover:text-text hover:bg-surface{% endif %}"
+        href="/library/{{ category | slug }}"
+      >
+        {{ category | capitalize }}
+        <span class="ml-1 text-xs opacity-70">({{ cat_posts }})</span>
+      </a>
     {% endfor %}
-  </ul>
+  </div>
 </div>
 {% endblock content %}

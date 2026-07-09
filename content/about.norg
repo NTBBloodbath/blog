@@ -32,7 +32,7 @@ version: 1.1.1
 
   - *Matrix* - `@ntbbloodbath.matrix.org`
   - *Discord* - `@ntbbloodbath`
-  - *Email* - `bloodbathalchemist@protonmail.com`
+  - *Email* - `me@amartin.beer`
 
   @embed html
   <h2><i class="ti ti-key"></i> GPG Public Key</h2>

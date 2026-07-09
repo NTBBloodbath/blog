@@ -1,0 +1,182 @@
+/* norgolith-tree-sitter-highlight -- Wistaria Syntax Theme */
+
+/* Base code block styling */
+pre code {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+    font-family: "Martian Mono Variable", "Cascadia Code", "Source Code Pro", monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 8px;
+}
+
+/* Keywords */
+.ts-keyword { color: var(--primary); font-weight: bold; }
+.ts-keyword.ts-conditional { color: var(--primary); font-weight: bold; }
+.ts-keyword.ts-conditional.ts-ternary { color: var(--primary); }
+.ts-keyword.ts-coroutine { color: var(--violet); font-style: italic; }
+.ts-keyword.ts-debug { color: var(--muted); }
+.ts-keyword.ts-directive { color: var(--muted); font-style: italic; }
+.ts-keyword.ts-directive.ts-define { color: var(--red); }
+.ts-keyword.ts-exception { color: var(--red); }
+.ts-keyword.ts-function { color: var(--violet); font-weight: bold; }
+.ts-keyword.ts-import { color: var(--secondary); }
+.ts-keyword.ts-modifier { color: var(--primary); }
+.ts-keyword.ts-operator { color: var(--violet); }
+.ts-keyword.ts-repeat { color: var(--primary); }
+.ts-keyword.ts-return { color: var(--red); }
+.ts-keyword.ts-type { color: var(--yellow); font-weight: bold; }
+
+/* Functions */
+.ts-function { color: var(--violet); }
+.ts-function.ts-builtin { color: var(--violet); font-style: italic; }
+.ts-function.ts-call { color: var(--violet); }
+.ts-function.ts-macro { color: var(--violet); }
+.ts-function.ts-method { color: var(--violet); }
+.ts-function.ts-method.ts-call { color: var(--violet); }
+
+/* Strings */
+.ts-string { color: var(--green); }
+.ts-string.ts-documentation { color: var(--green); font-style: italic; }
+.ts-string.ts-escape { color: var(--secondary); }
+.ts-string.ts-regexp { color: var(--secondary); }
+.ts-string.ts-special { color: var(--secondary); font-style: italic; }
+.ts-string.ts-special.ts-key { color: var(--secondary); }
+.ts-string.ts-special.ts-path { color: var(--secondary); }
+.ts-string.ts-special.ts-symbol { color: var(--secondary); }
+.ts-string.ts-special.ts-url { color: var(--violet); text-decoration: underline; }
+
+/* Characters */
+.ts-character { color: var(--yellow); }
+.ts-character.ts-special { color: var(--secondary); }
+
+/* Numbers */
+.ts-number { color: var(--yellow); }
+.ts-number.ts-float { color: var(--yellow); }
+
+/* Comments */
+.ts-comment { color: var(--muted); font-style: italic; }
+.ts-comment.ts-documentation { color: var(--muted); font-style: italic; font-weight: bold; }
+.ts-comment.ts-todo { color: var(--yellow); font-weight: bold; }
+.ts-comment.ts-note { color: var(--violet); font-weight: bold; }
+.ts-comment.ts-warning { color: var(--yellow); font-weight: bold; }
+.ts-comment.ts-error { color: var(--red); font-weight: bold; }
+
+/* Types */
+.ts-type { color: var(--yellow); font-weight: bold; }
+.ts-type.ts-builtin { color: var(--yellow); font-weight: bold; }
+.ts-type.ts-definition { color: var(--yellow); }
+
+/* Constants */
+.ts-constant { color: var(--yellow); }
+.ts-constant.ts-builtin { color: var(--yellow); font-weight: bold; }
+.ts-constant.ts-macro { color: var(--yellow); font-style: italic; }
+
+/* Booleans */
+.ts-boolean { color: var(--yellow); font-weight: bold; }
+
+/* Variables */
+.ts-variable { color: var(--text); }
+.ts-variable.ts-builtin { color: var(--red); font-style: italic; }
+.ts-variable.ts-member { color: var(--blue); }
+.ts-variable.ts-parameter { color: var(--red); }
+.ts-variable.ts-parameter.builtin { color: var(--red); }
+
+/* Properties and fields */
+.ts-property { color: var(--blue); }
+
+/* Attributes and decorators */
+.ts-attribute { color: var(--yellow); }
+.ts-attribute.ts-builtin { color: var(--yellow); font-style: italic; }
+
+/* Labels */
+.ts-label { color: var(--blue); font-style: italic; }
+
+/* Operators */
+.ts-operator { color: var(--blue); }
+
+/* Punctuation */
+.ts-punctuation.ts-bracket { color: var(--muted); }
+.ts-punctuation.ts-delimiter { color: var(--muted); }
+.ts-punctuation.ts-special { color: var(--secondary); }
+
+/* HTML tags */
+.ts-tag { color: var(--red); }
+.ts-tag.ts-attribute { color: var(--blue); }
+.ts-tag.ts-builtin { color: var(--red); }
+.ts-tag.ts-delimiter { color: var(--muted); }
+.ts-tag.ts-error { color: var(--red); text-decoration: wavy underline; text-decoration-color: var(--red); }
+
+/* Constructors */
+.ts-constructor { color: var(--yellow); font-weight: bold; }
+
+/* Embedded content */
+.ts-embedded { color: var(--green); font-style: italic; }
+
+/* Escape sequences */
+.ts-escape { color: var(--secondary); }
+
+/* Modules and namespaces */
+.ts-module { color: var(--violet); font-style: italic; }
+.ts-module.ts-builtin { color: var(--violet); }
+.ts-namespace { color: var(--violet); }
+
+/* Markdown markup */
+.ts-markup.ts-heading { color: var(--primary); font-weight: bold; }
+.ts-markup.ts-heading.ts-1 { color: var(--red); font-weight: bold; }
+.ts-markup.ts-heading.ts-2 { color: var(--yellow); font-weight: bold; }
+.ts-markup.ts-heading.ts-3 { color: var(--yellow); font-weight: bold; }
+.ts-markup.ts-heading.ts-4 { color: var(--green); font-weight: bold; }
+.ts-markup.ts-heading.ts-5 { color: var(--violet); font-weight: bold; }
+.ts-markup.ts-heading.ts-6 { color: var(--blue); font-weight: bold; }
+.ts-markup.ts-italic { font-style: italic; }
+.ts-markup.ts-strong { font-weight: bold; }
+.ts-markup.ts-strikethrough { text-decoration: line-through; }
+.ts-markup.ts-underline { text-decoration: underline; }
+.ts-markup.ts-link { color: var(--violet); text-decoration: underline; }
+.ts-markup.ts-link.ts-label { color: var(--blue); }
+.ts-markup.ts-link.ts-url { color: var(--violet); text-decoration: underline; }
+.ts-markup.ts-list { color: var(--secondary); }
+.ts-markup.ts-list.ts-checked { color: var(--green); }
+.ts-markup.ts-list.ts-unchecked { color: var(--muted); }
+.ts-markup.ts-quote { color: var(--muted); font-style: italic; }
+.ts-markup.ts-raw { color: var(--green); }
+.ts-markup.ts-raw.ts-block { color: var(--green); background: var(--surface); display: inline-block; width: 90%; }
+.ts-markup.ts-raw.ts-block:empty::before { content: '\00a0'; }
+
+/* CSS-specific at-rules */
+.ts-charset { color: var(--muted); font-style: italic; }
+.ts-import { color: var(--secondary); }
+.ts-keyframes { color: var(--secondary); }
+.ts-media { color: var(--secondary); }
+.ts-namespace { color: var(--violet); }
+.ts-supports { color: var(--secondary); }
+
+/* @interface */
+.ts-interface { color: var(--yellow); font-weight: bold; }
+
+/* Diff: added/removed lines */
+.ts-diff.ts-plus { color: var(--green); background: color-mix(in oklab, var(--green) 15%, transparent); }
+.ts-diff.ts-plus > .ts-punctuation.ts-special { color: var(--green); }
+.ts-diff.ts-minus { color: var(--red); background: color-mix(in oklab, var(--red) 15%, transparent); }
+.ts-diff.ts-minus > .ts-punctuation.ts-special { color: var(--red); }
+
+/* Line numbers */
+pre code {
+    counter-reset: line;
+}
+.ts-line::before {
+    counter-increment: line;
+    content: attr(data-ln);
+    display: inline-block;
+    width: 3ch;
+    margin-right: 1em;
+    padding-right: 1em;
+    color: var(--muted);
+    border-right: 1px solid color-mix(in oklab, var(--muted) 60%, transparent);
+    text-align: right;
+    user-select: none;
+}

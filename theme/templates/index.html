@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block seo_tags %}
+<meta property="og:title" content="{{ config.title | title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ config.rootUrl }}" />
+<meta property="og:description" content="{{ metadata.description }}" />
+<meta property="og:site_name" content="{{ config.title }}" />
+<meta property="og:locale" content="{{ config.language }}" />
+<link rel="canonical" href="{{ config.rootUrl }}" />
+<meta name="robots" content="index, follow" />
+{% endblock seo_tags %}
+{% block title %}{{ metadata.title }}{% endblock title %}
+{% block content %}
+<div class="space-y-12">
+  <section class="pb-8 mb-6">
+    {{ content | safe }}
+  </section>
+
+  {% set journal_posts = collection_journal | default(value=[]) | filter(attribute="draft", value=false) | sort(attribute="created") | reverse | slice(end=5) %}
+  {% set log_posts = collection_log | default(value=[]) | filter(attribute="draft", value=false) | sort(attribute="created") | reverse | slice(end=5) %}
+  {% if journal_posts | length > 0 %}
+  <section class="pt-6 border-t border-t-border">
+    <div class="flex items-center gap-1">
+      <i class="text-3xl ti ti-news align-middle mr-1"></i>
+      <h2 class="mt-0! mb-0!">Journal</h2>
+    </div>
+    <div class="flex flex-col gap-8 mt-6">
+      {% for post in journal_posts %}
+        {% include "shortcodes/entry_card.html" %}
+      {% endfor %}
+    </div>
+    {% if collection_journal | default(value=[]) | filter(attribute="draft", value=false) | length > 5 %}
+    <div class="mt-6">
+      <a href="/journal" class="text-sm text-muted hover:text-primary no-underline!">View all &rarr;</a>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {% if log_posts | length > 0 %}
+  <section class="pt-6 border-t border-t-border">
+    <div class="flex items-center gap-1">
+      <i class="text-3xl ti ti-notebook align-middle mr-1"></i>
+      <h2 class="mt-0! mb-0!">Log</h2>
+    </div>
+    <div class="flex flex-col gap-8 mt-6">
+      {% for post in log_posts %}
+        {% include "shortcodes/entry_card.html" %}
+      {% endfor %}
+    </div>
+    {% if collection_log | default(value=[]) | filter(attribute="draft", value=false) | length > 5 %}
+    <div class="mt-6">
+      <a href="/log" class="text-sm text-muted hover:text-primary no-underline!">View all &rarr;</a>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {% if journal_posts | length == 0 and log_posts | length == 0 %}
+  <section class="pt-6 border-t border-t-border">
+    <p class="italic text-muted">No posts yet.</p>
+  </section>
+  {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block seo_tags %}
+<meta property="og:title" content="{{ metadata.title | title }} - {{ config.title | title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ metadata.permalink }}" />
+<meta property="og:description" content="Posts on {{ config.title | title }}" />
+<meta property="og:site_name" content="{{ config.title }}" />
+<meta property="og:locale" content="{{ config.language }}" />
+{# TODO: add support for og:image using metadata #}
+<link rel="canonical" href="{{ metadata.permalink }}" />
+<meta name="robots" content="index, follow" />
+{% endblock seo_tags %}
+
+{% block title %}{{ metadata.title | title }}{% endblock title %}
+{% block content %}
+  <h1 class="mt-0! md:mt-4!"><span class="ti ti-news mr-2"></span>Journal</h1>
+  {% if metadata.description and metadata.description != "nil" %}
+  <p class="italic">{{ metadata.description }}</p>
+  {% else %}
+  <p class="italic">
+    Collection of longer thoughts and main articles.
+    This is where you will find the most substantial writing.
+  </p>
+  {% endif %}
+  <div class="flex flex-col gap-8 pt-6 mt-6 border-t border-t-border">
+    {% for post in collection_journal | filter(attribute="draft", value=false) | sort(attribute="created") | reverse %}
+      {% include "shortcodes/entry_card.html" %}
+    {% endfor %}
+  </div>
+{% endblock content %}

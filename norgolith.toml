@@ -2,11 +2,12 @@ rootUrl = 'https://amartin.beer'
 language = 'en-US'
 title = "Amartin's blog"
 author = 'amartin'
+categoriesDir = 'library'
 
 # Code blocks highlighting
 [highlighter]
 enable = true
-engine = 'prism'
+engine = 'tree-sitter'
 
 # RSS feed
 [rss]
@@ -15,19 +16,57 @@ description = 'Latest posts'
 ttl = 60
 image = '/assets/favicon.png'
 
+# Posts collections
+# Journal: Longer, more polished articles and essays.
+# Log: Shorter, more informal notes, thoughts, and micro-entries.
+[[collections]]
+name = 'journal'
+dir  = 'journal'
+
+[[collections]]
+name = 'log'
+dir  = 'log'
+
 # Extras
 [extra]
 license = "GPLv3"
 favicon_path = '/assets/favicon.png'
-footer_author_link = "https://codeberg.org/amartin"
+footer_author_link = "https://github.com/NTBBloodbath"
 enable_mermaid = true
 
 [extra.nav]
-About = '/about'
-Posts = '/posts'
-Tags = '/categories'
-RSS = '/rss.xml'
+Journal = { url = "/journal", icon = "news" }
+Log = { url = "/log", icon = "notebook" }
+Library = { url = "/library", icon = "book-2" }
+About = { url = "/about", icon = "info-circle" }
+RSS = { url = "/rss.xml", icon = "rss" }
 
 [extra.footer]
-GitHub = 'https://github.com/NTBBloodbath'
-Codeberg = 'https://codeberg.org/amartin'
+GitHub = { url = 'https://github.com/NTBBloodbath', icon = "brand-git" }
+Codeberg = { url = 'https://codeberg.org/amartin', icon = "iceberg" }
+
+# Tag colors: accepts either theme color tokens or raw CSS color values.
+#
+# Theme tokens (adapt automatically to dark mode):
+#   primary, secondary, green, blue, violet, yellow, red
+#
+# Raw CSS values (static, no dark mode adaptation):
+#   #rrggbb, rgb(...), hsl(...), oklch(...)
+#
+[extra.tags]
+log = 'blue'
+lua = 'blue'
+luarocks = 'blue'
+hugo = 'violet'
+neorg = 'violet'
+neovim = 'green'
+tree-sitter = 'green'
+rant = 'red'
+devlog = 'primary'
+selfhosting = 'secondary'
+
+# Plugins
+[plugins.norgolith-tree-sitter-highlight]
+css-path = "/assets/css/tree-sitter-theme.css"
+line-numbers = true
+line-numbers-start = 1

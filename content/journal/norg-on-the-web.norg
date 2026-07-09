@@ -10,7 +10,7 @@ categories: [
 created: 2025-07-15T08:02:56-04:00
 updated: 2025-07-24T16:51:07-0400
 draft: false
-layout: post
+layout: entry
 truncate: 159
 version: 1.1.1
 @end
@@ -882,7 +882,7 @@ and its early development alongside some technical explanations, and just want t
 **** Template Basics
      - *Directory Structure*: Place all templates in `templates/` (e.g. `templates/base.html`).
      - *Variables*: Render content with `{{ variable }}`:
-     @code jinja2
+     @code tera
      <h1>{{ metadata.title }}</h1>
      @end
 
@@ -896,7 +896,7 @@ and its early development alongside some technical explanations, and just want t
      Create reusable layouts using *inheritance*:
 
      - *Base Template* (`base.html`):
-     @code jinja2
+     @code tera
      <!DOCTYPE html>
      <html>
        <head>
@@ -908,7 +908,7 @@ and its early development alongside some technical explanations, and just want t
      </html>
      @end
      - *Child Template* (`page.html`):
-     @code jinja2
+     @code tera
      {% extends "base.html" %}
 
      {% block title %}My Page{% endblock %}
@@ -922,14 +922,14 @@ and its early development alongside some technical explanations, and just want t
 
 **** Control Structures
      - *Conditionals*:
-     @code jinja2
+     @code tera
      {% if metadata.draft %}
        <span>This post is currently a draft, it might change in the future.</span>
      {% endif %}
      @end
 
      - *Loops*:
-     @code jinja2
+     @code tera
      {% for post in posts %}
        <h2>{{ post.title }}</h2>
      {% endfor %}
@@ -940,7 +940,7 @@ and its early development alongside some technical explanations, and just want t
 **** Filters & Functions
      Modify data directly in templates:
 
-     @code jinja2
+     @code tera
      {{ "hello" | capitalize }}  → "Hello"
      {{ posts | length }}        → Number of posts
      {{ now() | date(format="%Y-%m-%d") }} → Current date

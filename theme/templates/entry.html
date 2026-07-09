@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block seo_tags %}
+<meta property="og:title" content="{{ metadata.title | title }} - {{ config.title | title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ metadata.permalink }}" />
+<meta property="og:description" content="{{ metadata.description }}" />
+<meta property="og:site_name" content="{{ config.title }}" />
+<meta property="og:locale" content="{{ config.language }}" />
+{# TODO: add support for og:image using metadata #}
+<link rel="canonical" href="{{ metadata.permalink }}" />
+<meta name="robots" content="index, follow" />
+{% endblock seo_tags %}
+
+{% block title %}{{ metadata.title | title }}{% endblock title %}
+{% block content %}
+<div x-data="toc" x-init="init()" class="relative">
+  <div
+    x-data="{ progress: 0 }"
+    x-on:scroll.window.throttle="progress = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100"
+    class="fixed top-0 left-0 z-50 h-1 bg-primary/60 pointer-events-none transition-all duration-150"
+    :style="'width: ' + progress + '%'"
+    :class="progress > 0 ? 'opacity-100' : 'opacity-0'"
+  ></div>
+  <div class="mb-4">
+    <h1 class="mt-0! md:mt-4!">{{ metadata.title }}</h1>
+    <p class="italic">{{ metadata.description }}</p>
+  </div>
+
+  <div class="flex flex-col flex-1 justify-between">
+    <div class="flex flex-col space-y-2">
+      {# Date, reading time #}
+      {% set created = metadata.created | date(format="%B %e, %Y") %}
+      {% set updated = metadata.updated | date(format="%B %e, %Y") %}
+      <span class="text-muted text-sm tabular-nums space-x-1">
+        <span class="ti ti-calendar mr-1"></span>
+        <time datetime="{{ metadata.created }}">{{ created }}</time>
+        {% if created != updated %}
+        (Last edit: <time datetime="{{ metadata.updated }}">{{ metadata.updated | date(format="%B %e, %Y") }}</time>)
+        {% endif %}
+        <span class="mx-1">&middot;</span>
+        <span><span class="ti ti-clock mr-1"></span>{{ (content | length / 6000) | round(method="ceil") | int }} min read</span>
+      </span>
+      {% if metadata.authors and metadata.authors | length > 0 %}
+      <div class="text-sm text-muted">
+          <span class="ti ti-user mr-1"></span>{{ metadata.authors | join(sep=", ") }}
+      </div>
+      {% endif %}
+    </div>
+    {% if metadata.categories | length > 0 %}
+    <div class="flex flex-wrap items-center mt-2 space-y-2">
+        <span class="ti ti-tags mr-1"></span><span class="text-sm font-semibold mr-px">Tags:&nbsp;</span>
+        {% for category in metadata.categories %}
+        {% if config.extra.tags and category in config.extra.tags %}
+        {% set tag_color = config.extra.tags[category] %}
+        {% else %}
+        {% set tag_color = "" %}
+        {% endif %}
+        <a
+                {% if tag_color %}style="--tag-color: {% if tag_color is starting_with(pat='#') or tag_color is starting_with(pat='rgb') or tag_color is starting_with(pat='hsl') or tag_color is starting_with(pat='oklch') %}{{ tag_color }}{% else %}var(--color-{{ tag_color }}){% endif %}"{% endif %}
+                class="flex items-center w-fit {% if tag_color %}bg-[color-mix(in_oklab,var(--tag-color)_25%,transparent)] text-(--tag-color) hover:bg-[color-mix(in_oklab,var(--tag-color)_50%,transparent)]{% else %}bg-surface/80 dark:bg-surface/60 text-muted hover:text-text hover:bg-surface{% endif %} no-underline! hover:no-underline! text-sm mr-2 last:mr-0 last:mb-2 px-4 py-1 rounded-full"
+                href="/library/{{ category | slug }}"
+                >
+                <span class="ti ti-tag mr-1"></span>{{ category | capitalize }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if metadata.image %}
+  <img src="{{ metadata.image }}" alt="{{ metadata.title }}" class="w-full rounded-md my-6" />
+  {% endif %}
+
+  <div class="relative mt-8">
+      <div id="content" class="pt-6 border-t break-keep border-t-border">
+          {{ content | safe }}
+      </div>
+
+      {% set_global prev_post = false %}
+      {% set_global next_post = false %}
+      {% set_global found_current = false %}
+      {% set rel_dir = metadata.rel_path | split(pat="/") | first %}
+      {% if rel_dir == "journal" %}
+      {% set collection = collection_journal | filter(attribute="draft", value=false) | sort(attribute="created") %}
+      {% elif rel_dir == "log" %}
+      {% set collection = collection_log | filter(attribute="draft", value=false) | sort(attribute="created") %}
+      {% else %}
+      {% set collection = [] %}
+      {% endif %}
+      {% for post in collection %}
+      {% if found_current and not next_post %}
+      {% set_global next_post = post %}
+      {% endif %}
+      {% if post.permalink == metadata.permalink %}
+      {% set_global found_current = true %}
+      {% endif %}
+      {% if not found_current %}
+      {% set_global prev_post = post %}
+      {% endif %}
+      {% endfor %}
+
+      {% if prev_post or next_post %}
+      <div class="flex flex-col sm:flex-row justify-between mt-12 pt-6 border-t border-t-border gap-2">
+          {% if prev_post %}
+          <a href="{{ prev_post.permalink }}" class="text-muted hover:text-primary transition-colors">
+              ← {{ prev_post.title }}
+          </a>
+          {% endif %}
+          {% if next_post %}
+          <a href="{{ next_post.permalink }}" class="text-muted hover:text-primary transition-colors sm:text-right">
+              {{ next_post.title }} →
+          </a>
+          {% endif %}
+      </div>
+      {% endif %}
+
+      {% if metadata.toc %}
+      {% set toc_html = generate_toc(toc=metadata.toc, list_type="ol") %}
+
+      <button
+              type="button"
+              class="wistaria-toc-desktop-handle hidden lg:inline-flex"
+              x-show="!isMobile"
+              x-transition.opacity
+              :aria-expanded="open.toString()"
+              aria-controls="desktop-toc"
+              aria-label="Toggle table of contents"
+              @click="toggle()"
+              >
+              <span class="ti ti-list"></span>
+              <span class="sr-only">Open table of contents</span>
+      </button>
+
+      <aside
+              id="desktop-toc"
+              class="wistaria-toc-desktop-drawer hidden lg:block"
+              x-show="open && !isMobile"
+              x-transition:enter="transition duration-200 ease-out"
+              x-transition:enter-start="opacity-0 -translate-x-3"
+              x-transition:enter-end="opacity-100 translate-x-0"
+              x-transition:leave="transition duration-150 ease-in"
+              x-transition:leave-start="opacity-100 translate-x-0"
+              x-transition:leave-end="opacity-0 -translate-x-3"
+              >
+              <section class="wistaria-toc-panel h-full">
+                  <div class="wistaria-toc-header">
+                      <p class="wistaria-toc-title">On this page</p>
+                      <button
+                              type="button"
+                              class="wistaria-toc-toggle"
+                              :aria-expanded="open.toString()"
+                              aria-label="Close table of contents"
+                              @click="toggle()"
+                              >
+                              <span class="ti ti-x"></span>
+                      </button>
+                  </div>
+                  <nav
+                          data-toc-nav
+                          class="wistaria-toc-nav wistaria-toc-nav-desktop"
+                          @click="closeOnMobile($event)"
+                          >
+                          {{ toc_html | safe }}
+                  </nav>
+              </section>
+      </aside>
+
+      <button
+              type="button"
+              class="wistaria-toc-fab lg:hidden"
+              x-show="isMobile"
+              x-transition.opacity
+              :aria-expanded="open.toString()"
+              aria-controls="mobile-toc"
+              @click="toggle()"
+              >
+              <span class="ti ti-list"></span>
+              <span>Contents</span>
+      </button>
+
+      <div
+              class="wistaria-toc-backdrop lg:hidden"
+              x-show="open && isMobile"
+              x-transition.opacity
+              @click="toggle()"
+              ></div>
+
+      <section
+              id="mobile-toc"
+              class="wistaria-toc-drawer lg:hidden"
+              x-show="open && isMobile"
+              x-transition:enter="transition duration-200 ease-out"
+              x-transition:enter-start="opacity-0 translate-y-4"
+              x-transition:enter-end="opacity-100 translate-y-0"
+              x-transition:leave="transition duration-150 ease-in"
+              x-transition:leave-start="opacity-100 translate-y-0"
+              x-transition:leave-end="opacity-0 translate-y-3"
+              >
+              <div class="wistaria-toc-header">
+                  <p class="wistaria-toc-title">On this page</p>
+                  <button type="button" class="wistaria-toc-toggle" @click="toggle()" aria-label="Close table of contents">
+                      <span class="ti ti-x"></span>
+                  </button>
+              </div>
+              <nav data-toc-nav class="wistaria-toc-nav mt-2 max-h-[52dvh] overflow-y-auto" @click="closeOnMobile($event)">
+                  {{ toc_html | safe }}
+              </nav>
+      </section>
+      {% endif %}
+
+      <button
+              x-data="{ show: false }"
+              x-on:scroll.window.throttle="show = window.scrollY > 400"
+              x-show="show"
+              x-transition
+              @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+              class="fixed bottom-5 left-5 z-40 inline-flex items-center justify-center w-10 h-10 rounded-full border border-border bg-surface text-text shadow-lg hover:bg-surface/80 transition-colors"
+              aria-label="Back to top"
+              >
+              <span class="ti ti-arrow-up"></span>
+    </button>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,30 @@
+{# Entry card partial. Expects `post` in context. Use via: {% include "shortcodes/entry_card.html" %} #}
+<div class="flex flex-col md:flex-row md:gap-8">
+  <span class="w-32 text-sm font-semibold tabular-nums md:my-3.5 text-muted md:pt-2">
+    <span class="ti ti-calendar mr-1"></span><time datetime="{{ post.created }}">{{ post.created | date(format="%b %e, %Y") }}</time>
+  </span>
+  <div class="flex flex-col gap-1 w-full pl-2 border-l border-l-transparent hover:border-l-2 hover:border-l-primary transition-all duration-150">
+    <a href="{{ post.permalink }}" class="no-underline! hover:text-text flex flex-col gap-1">
+      <h2 class="md:pt-2 mt-0! md:mt-3 mb-0! md:mb-1 hover:underline! hover:decoration-dashed hover:decoration-primary">{{ post.title }}</h2>
+      <p>{{ post.description }}</p>
+    </a>
+    {% if post.categories | length > 0 %}
+      <div class="flex flex-wrap items-center mt-2 space-y-2">
+        {% for category in post.categories %}
+          {% if config.extra.tags and category in config.extra.tags %}
+            {% set tag_color = config.extra.tags[category] %}
+          {% else %}
+            {% set tag_color = "" %}
+          {% endif %}
+          <a
+            {% if tag_color %}style="--tag-color: {% if tag_color is starting_with(pat='#') or tag_color is starting_with(pat='rgb') or tag_color is starting_with(pat='hsl') or tag_color is starting_with(pat='oklch') %}{{ tag_color }}{% else %}var(--color-{{ tag_color }}){% endif %}"{% endif %}
+            class="w-fit {% if tag_color %}bg-[color-mix(in_oklab,var(--tag-color)_25%,transparent)] text-(--tag-color) hover:bg-[color-mix(in_oklab,var(--tag-color)_50%,transparent)]{% else %}bg-surface/80 dark:bg-surface/60 text-muted hover:text-text hover:bg-surface{% endif %} no-underline! hover:no-underline! text-sm mr-2 last:mr-0 last:mb-2 px-4 py-1 rounded-full"
+            href="/library/{{ category | slug }}"
+          >
+            <span class="ti ti-tag mr-1"></span>{{ category | capitalize }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

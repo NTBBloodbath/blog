@@ -4,6 +4,9 @@
 # Production artifacts
 public
 
+# Plugins artifacts
+plugins/
+
 # Sync scripts
 deploy.sh
 

@@ -1,12 +1,9 @@
-<div
-  class="flex flex-col md:flex-row justify-between md:items-center font-medium text-xs md:text-sm text-text-alt space-y-4 md:space-y-0"
->
-  <span
-      >Copyright &copy; {{ now(format="%Y") }}
+<div class="container flex flex-col justify-between py-4 px-4 mx-auto space-y-2 md:space-y-0 md:flex-row md:items-center">
+  <span>Copyright &copy; {{ now() | date(format="%Y") }}
     {% if config.extra.footer_author_link %}
     <a
       href="{{ config.extra.footer_author_link }}"
-      class="text-blue hover:underline">{{ config.author }}</a
+      class="hover:underline text-blue">{{ config.author }}</a
     >.
     {% else %}
     {{ config.author }}.
@@ -15,14 +12,14 @@
       <br class="md:hidden" /> Licensed under {{ config.extra.license }}.
     {% endif %}
   </span>
-  <div class="flex flex-inline">
-    {% for name, link in config.extra.footer %}
+  <div class="flex flex-inline {% if config.extra.license %}border-t border-t-border pt-2 md:border-none md:pt-0{% endif %}">
+    {% for name, item in config.extra.footer %}
     <div class="mr-4 md:mr-6 lg:mr-8 last:mr-0">
       <a
-        href="{{ link }}"
-        class="hover:text-blue"
+        href="{{ item.url }}"
+        class="hover:text-primary"
       >
-        <span>{{ name | title }}</span>
+        {% if item.icon %}<i class="ti ti-{{ item.icon }} mr-1"></i>{% endif %}<span>{{ name }}</span>
       </a>
     </div>
     {% endfor %}
