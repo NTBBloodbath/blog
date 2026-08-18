@@ -15,17 +15,14 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
         pkgs = import nixpkgs {inherit system;};
-        toolchain = pkgs.rustPlatform;
       in
       {
         # nix develop
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            (with toolchain; [
-              cargo
-              rustc
-              rustLibSrc
-            ])
+            pkgs.rustPlatform.rustLibSrc
+            pkgs.cargo
+            pkgs.rustc
 
             rustywind # Organize Tailwind CSS classes
             watchman # required by tailwindcss CLI for watch functionality
